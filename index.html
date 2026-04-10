@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Prompt Generator by Dali</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 800px; width: 100%; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1 { color: #1a73e8; text-align: center; border-bottom: 2px solid #e8f0fe; padding-bottom: 15px; }
+        .field-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
+        select, input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        textarea { height: 100px; resize: vertical; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .result-box { background: #f8f9fa; border: 2px dashed #1a73e8; padding: 20px; border-radius: 10px; margin-top: 30px; }
+        #finalPrompt { background: transparent; border: none; width: 100%; font-family: 'Courier New', monospace; font-size: 16px; color: #333; height: 150px; outline: none; }
+        .copy-btn { background: #1a73e8; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s; margin-top: 10px; }
+        .copy-btn:hover { background: #1557b0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Automatic Prompt Generator by Dali</h1>
+    
+    <div class="field-group">
+        <label>Rôle (Qui est l'IA ?)</label>
+        <select id="role">
+            <option value="Expert en Marketing Digital">Expert en Marketing Digital</option>
+            <option value="Développeur Full-Stack Senior">Développeur Full-Stack Senior</option>
+            <option value="Créateur de contenu YouTube">Créateur de contenu YouTube</option>
+            <option value="Professeur de Sciences">Professeur de Sciences</option>
+        </select>
+    </div>
+
+    <div class="field-group">
+        <label>Action (Que doit-elle faire ?)</label>
+        <select id="action">
+            <option value="rédiger un script détaillé pour">Rédiger un script</option>
+            <option value="générer un prompt d'image réaliste pour">Générer un prompt d'image</option>
+            <option value="créer un plan de cours structuré sur">Créer un plan de cours</option>
+            <option value="analyser et optimiser le texte suivant :">Analyser/Optimiser un texte</option>
+        </select>
+    </div>
+
+    <div class="field-group">
+        <label>Contexte / Sujet</label>
+        <textarea id="context" placeholder="Décrivez ici le sujet principal..."></textarea>
+    </div>
+
+    <div class="grid">
+        <div class="field-group">
+            <label>Format de sortie</label>
+            <select id="format">
+                <option value="en Markdown avec des titres">Markdown</option>
+                <option value="sous forme de tableau">Tableau</option>
+                <option value="en liste à puces">Liste à puces</option>
+                <option value="en code JSON">JSON</option>
+            </select>
+        </div>
+        <div class="field-group">
+            <label>Public cible</label>
+            <input type="text" id="audience" placeholder="ex: Débutants, Étudiants...">
+        </div>
+    </div>
+
+    <div class="result-box">
+        <label>Votre Prompt Généré :</label>
+        <textarea id="finalPrompt" readonly></textarea>
+        <button class="copy-btn" onclick="copyPrompt()">Copier le Prompt</button>
+    </div>
+</div>
+
+<script>
+    const inputs = document.querySelectorAll('input, select, textarea');
+    
+    function generate() {
+        const role = document.getElementById('role').value;
+        const action = document.getElementById('action').value;
+        const context = document.getElementById('context').value || "[Sujet]";
+        const format = document.getElementById('format').value;
+        const audience = document.getElementById('audience').value || "un public général";
+
+        const prompt = `Agis en tant que ${role}. Ta mission est de ${action} ${context}. \n\nL'output doit être présenté ${format}. \nLe public visé est : ${audience}. Assure-toi que le ton est adapté.`;
+        
+        document.getElementById('finalPrompt').value = prompt;
+    }
+
+    inputs.forEach(input => input.addEventListener('input', generate));
+
+    function copyPrompt() {
+        const text = document.getElementById('finalPrompt');
+        text.select();
+        document.execCommand('copy');
+        alert('Prompt copié !');
+    }
+
+    // Initialisation
+    generate();
+</script>
+
+</body>
+</html>
